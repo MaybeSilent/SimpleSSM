@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <!-- 加载属性文件 -->
+    <properties resource="db.properties">
+        <!-- properties中还可以配置一些属性名和属性值 -->
+        <!-- <property name="" value=""/> -->
+    </properties>
+    <!-- <settings></settings> -->
+    <!-- 和spring整合后 environments配置将废除-->
+    <environments default="development">
+        <environment id="development">
+            <!-- 使用jdbc事务管理-->
+            <transactionManager type="JDBC" />
+            <!-- 数据库连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${db.driver}" />
+                <property name="url" value="${db.url}" />
+                <property name="username" value="${db.user}" />
+                <property name="password" value="${db.password}" />
+            </dataSource>
+        </environment>
+    </environments>
+    <!-- 加载映射文件 -->
+    <mappers>
+        <!-- 通过resource加载单个映射文件 -->
+        <!-- <mapper resource="mapper/UserMapper.xml"/> -->
+        <!-- 通过mapper接口加载
+            规范：需要将mapper接口的类名和mapper.xml映射文件名称保持一致，且在同一个目录中
+            上边规范的前提是，使用的是mapper代理的方法
+        -->
+        <!-- <mapper class="cn.ztc.mybatis.mapper.UserMapper"/> -->
+        <!-- 批量加载
+            name:mapper接口的包名
+        -->
+        <mapper resource="Mapper/SalesMapper.xml"/>
+        <mapper resource="Mapper/UsersMapper.xml"/>
+        <mapper resource="Mapper/TokensMapper.xml"/>
+        <mapper resource="Mapper/StatusesMapper.xml"/>
+        <mapper resource="Mapper/StatusRepliesMapper.xml"/>
+        <mapper resource="Mapper/SaleCommentsMapper.xml"/>
+    </mappers>
+</configuration>
