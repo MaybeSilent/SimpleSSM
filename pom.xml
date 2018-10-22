@@ -11,10 +11,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <springframework.version>4.3.19.RELEASE</springframework.version>
-        <jackson.version>2.5.3</jackson.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.15</version>
+        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
@@ -89,16 +94,6 @@
             <artifactId>spring-jdbc</artifactId>
             <version>${springframework.version}</version>
         </dependency>
-
-
-        <!-- jackson start -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <!-- jackson end -->
-
 
     </dependencies>
 

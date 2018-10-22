@@ -7,6 +7,7 @@ import com.dao.Pojo.Users;
 import com.srvice.SalesService;
 import com.srvice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class salesController {
 
     @Authorization
     @ResponseBody
-    @RequestMapping(value = "/sale" , method = POST)
+    @RequestMapping(value = "/sale" , method = POST , consumes = MediaType.APPLICATION_JSON_VALUE)
     public HashMap<String, Object> getsales(HttpServletRequest request, @RequestBody Sales saleModel){
         HashMap<String,Object> response = new HashMap<String,Object>();
 

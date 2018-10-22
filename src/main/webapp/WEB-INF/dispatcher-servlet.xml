@@ -12,11 +12,13 @@
     <!-- 能够自动注册RequestMappingHandlerMapping 与 RequestMappingHandlerAdapter -->
     <!-- 这是SpringMVC为@Controllers分发请求所必需的 -->
     <mvc:annotation-driven>
-        <mvc:message-converters>
-            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
-            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+        <mvc:message-converters register-defaults="true">
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes" value="application/json"/>
+            </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
 
     <mvc:interceptors>
         <mvc:interceptor>
