@@ -32,7 +32,7 @@ public class salesController {
 
     @Authorization
     @ResponseBody
-    @RequestMapping(value = "/sale" , method = POST , consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/sale" , method = POST)
     public HashMap<String, Object> getsales(HttpServletRequest request, @RequestBody Sales saleModel){
         HashMap<String,Object> response = new HashMap<String,Object>();
 
@@ -44,6 +44,24 @@ public class salesController {
         response.put("user",user);
         response.put("sale",saleModel);
         return response;
+    }
+
+    @Authorization
+    @ResponseBody
+    @RequestMapping(value = "/saleDelete" , method = POST)
+    public HashMap<String , Boolean> deleteSales(HttpServletRequest request, @RequestBody Sales saleModel){
+        HashMap<String,Boolean> response = new HashMap<String,Boolean>();
+
+        int userid = (int) request.getAttribute(Constant.CURRENT_USER_ID);
+        int salesId = saleModel.getId();
+        int successed = salesService.deleteSales(userid,salesId);
+        if(successed == 0){
+            response.put("successed",false);
+            return response;
+        } else {
+            response.put("successed",true);
+            return response;
+        }
     }
 
 }
