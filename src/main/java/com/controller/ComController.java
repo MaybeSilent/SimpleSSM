@@ -1,17 +1,18 @@
 package com.controller;
 
+
 import com.authorization.annotation.Authorization;
 import com.authorization.constant.Constant;
-import com.dao.Pojo.Sales;
+import com.dao.Pojo.SaleComments;
 import com.dao.Pojo.Users;
-import com.srvice.SalesService;
+import com.srvice.SalesComService;
 import com.srvice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -21,55 +22,52 @@ import java.util.List;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-
 @Controller
-public class SalesController {
-
+public class ComController {
     @Autowired
-    private SalesService salesService;
+    private SalesComService salesComService;
 
     @Autowired
     private UserService userService;
 
-    @Authorization
     @ResponseBody
-    @RequestMapping(value = "/sale" , method = POST)
-    public HashMap<String, Object> getsales(HttpServletRequest request, @RequestBody Sales saleModel){
+    @Authorization
+    @RequestMapping(value = "/saleCom" , method = POST)
+    public HashMap<String, Object> getComs(HttpServletRequest request, @RequestBody SaleComments saleComments){
         HashMap<String,Object> response = new HashMap<String,Object>();
 
         int userid = (int) request.getAttribute(Constant.CURRENT_USER_ID);
         Users user = userService.findById(userid);
         user.setPasswordHash(null);
-        saleModel.setUserId(userid);
-        saleModel.setTimestamp(new Date());
-        salesService.insertSales(saleModel);
+        saleComments.setUserId(userid);
+        saleComments.setTimestamp(new Date());
+        salesComService.insertCom(saleComments);
         response.put("user",user);
-        response.put("sale",saleModel);
+        response.put("saleCom",saleComments);
+
         return response;
     }
 
     @ResponseBody
-    @RequestMapping(value = "/sale" , method = GET)
-    public List selectSales(){
-        return salesService.selectSales();
+    @RequestMapping(value = "/saleCom" , method = GET)
+    public List getSaleComs(@RequestParam("saleId") int saleId){
+        return salesComService.selectSalesCom(saleId);
     }
 
     @Authorization
     @ResponseBody
-    @RequestMapping(value = "/saleDelete" , method = POST)
-    public HashMap<String , Boolean> deleteSales(HttpServletRequest request, @RequestBody Sales saleModel){
+    @RequestMapping(value = "/saleComDelete" , method = POST)
+    public HashMap<String , Boolean> deleteSales(HttpServletRequest request, @RequestBody SaleComments saleComments){
         HashMap<String,Boolean> response = new HashMap<String,Boolean>();
 
-        int userid = (int) request.getAttribute(Constant.CURRENT_USER_ID);
-        int salesId = saleModel.getId();
-        int successed = salesService.deleteSales(userid,salesId);
-        if(successed == 0){
-            response.put("successed",false);
-            return response;
-        } else {
-            response.put("successed",true);
-            return response;
-        }
+        int commentId = saleComments.getId();
+
+        boolean successed = salesComService.deleteCom((int) request.getAttribute(Constant.CURRENT_USER_ID),commentId);
+
+        response.put("successed",successed);
+        return response;
+
     }
+
 
 }

@@ -7,6 +7,8 @@ import com.dao.Pojo.SalesExample.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class SalesService {
@@ -18,6 +20,12 @@ public class SalesService {
         return salesMapper.insert(sales);
     }
 
+    public List selectSales(){
+        SalesExample salesExample = new SalesExample();
+        Criteria criteria = salesExample.createCriteria();
+        return salesMapper.selectByExampleWithBLOBs(salesExample);
+    }
+
     public int deleteSales(int userId, int saleId){
         SalesExample salesExample = new SalesExample();
         Criteria criteria = salesExample.createCriteria();
@@ -25,5 +33,6 @@ public class SalesService {
         criteria.andUserIdEqualTo(userId);
         return salesMapper.deleteByExample(salesExample);
     }
+
 
 }

@@ -1,4 +1,4 @@
 package com.controller;
 
-public class userController {
+public class UserController {
 }

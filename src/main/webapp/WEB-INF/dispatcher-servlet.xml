@@ -5,7 +5,7 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <!-- 扫描相应的controller -->
-    <context:component-scan base-package="com" />
+    <context:component-scan base-package="com.controller" />
 
     <context:annotation-config />
 
@@ -25,7 +25,7 @@
             <!-- /**的意思是所有文件夹及里面的子文件夹 /*是所有文件夹，不含子文件夹 /是web项目的根目录 -->
             <mvc:mapping path="/**" />
             <!-- 需排除拦截的地址 -->
-            <!-- <mvc:exclude-mapping path="/userController/login"/> -->
+            <!-- <mvc:exclude-mapping path="/UserController/login"/> -->
             <bean id="commonInterceptor" class="com.authorization.interceptor.AuthorizationInterceptor"/> <!--这个类就是我们自定义的Interceptor -->
         </mvc:interceptor>
         <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->

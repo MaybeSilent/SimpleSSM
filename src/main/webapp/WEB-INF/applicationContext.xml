@@ -7,6 +7,7 @@
 
 
     <context:property-placeholder location="classpath:/db.properties"/>
+    <context:component-scan base-package="com" />
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <!--驱动-->
