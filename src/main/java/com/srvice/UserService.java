@@ -15,6 +15,14 @@ public class UserService {
     @Autowired
     private UsersMapper usersMapper;
 
+    public boolean updateUser(int userId , Users userModel){
+        UsersExample usersExample = new UsersExample();
+        Criteria criteria = usersExample.createCriteria();
+        criteria.andIdEqualTo(userId);
+
+        return usersMapper.updateByExampleSelective(userModel,usersExample) != 0;
+    }
+
     public Users findById(int userId){
         UsersExample usersExample = new UsersExample();
         Criteria criteria = usersExample.createCriteria();
