@@ -1,133 +1,62 @@
-/*
-Navicat MySQL Data Transfer
+CREATE TABLE users ( 
+    id INTEGER NOT NULL AUTO_INCREMENT, 
+    email VARCHAR(64), 
+    username VARCHAR(32) NOT NULL, 
+    password_hash VARCHAR(128), 
+    avatar VARCHAR(64), 
+    self_intro VARCHAR(40), 
+    gender INTEGER, 
+    PRIMARY KEY (id) 
+);
 
-Source Server         : 127.0.0.1
-Source Server Version : 80012
-Source Host           : localhost:3306
-Source Database       : dbwork
+CREATE TABLE statuses ( 
+    id INTEGER NOT NULL AUTO_INCREMENT, 
+    text TEXT NOT NULL, 
+    timestamp DATETIME NOT NULL, 
+    user_id INTEGER NOT NULL, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(user_id) REFERENCES users (id)
+);
 
-Target Server Type    : MYSQL
-Target Server Version : 80012
-File Encoding         : 65001
+CREATE TABLE status_replies ( 
+    id INTEGER NOT NULL AUTO_INCREMENT, 
+    text TEXT NOT NULL, 
+    timestamp DATETIME, 
+    status_id INTEGER NOT NULL, 
+    user_id INTEGER NOT NULL, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(status_id) REFERENCES statuses (id), 
+    FOREIGN KEY(user_id) REFERENCES users (id) 
+);
 
-Date: 2018-10-21 22:06:29
-*/
 
+CREATE TABLE sales ( 
+    id INTEGER NOT NULL AUTO_INCREMENT, 
+    title VARCHAR(32) NOT NULL, 
+    text TEXT NOT NULL, 
+    price FLOAT, location VARCHAR(16), 
+    category VARCHAR(16), 
+    user_id INTEGER NOT NULL, 
+    timestamp DATETIME NOT NULL, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(user_id) REFERENCES users (id) 
+);
 
--- ----------------------------
--- Table structure for `sales`
--- ----------------------------
-DROP TABLE IF EXISTS `sales`;
-CREATE TABLE `sales` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(32) NOT NULL,
-  `text` text NOT NULL,
-  `price` float DEFAULT NULL,
-  `location` varchar(16) DEFAULT NULL,
-  `category` varchar(16) DEFAULT NULL,
-  `user_id` int(11) NOT NULL,
-  `timestamp` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE sale_comments ( 
+    id INTEGER NOT NULL AUTO_INCREMENT, 
+    text TEXT NOT NULL, 
+    timestamp DATETIME, 
+    sale_id INTEGER NOT NULL, 
+    user_id INTEGER NOT NULL, 
+    PRIMARY KEY (id), 
+    FOREIGN KEY(sale_id) REFERENCES sales (id), 
+    FOREIGN KEY(user_id) REFERENCES users (id) 
+);
 
--- ----------------------------
--- Records of sales
--- ----------------------------
-
--- ----------------------------
--- Table structure for `sale_comments`
--- ----------------------------
-DROP TABLE IF EXISTS `sale_comments`;
-CREATE TABLE `sale_comments` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `text` text NOT NULL,
-  `timestamp` datetime DEFAULT NULL,
-  `sale_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sale_id` (`sale_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `sale_comments_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `sales` (`id`),
-  CONSTRAINT `sale_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Records of sale_comments
--- ----------------------------
-
--- ----------------------------
--- Table structure for `statuses`
--- ----------------------------
-DROP TABLE IF EXISTS `statuses`;
-CREATE TABLE `statuses` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `text` text NOT NULL,
-  `timestamp` datetime NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `statuses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Records of statuses
--- ----------------------------
-
--- ----------------------------
--- Table structure for `status_replies`
--- ----------------------------
-DROP TABLE IF EXISTS `status_replies`;
-CREATE TABLE `status_replies` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `text` text NOT NULL,
-  `timestamp` datetime DEFAULT NULL,
-  `status_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `status_id` (`status_id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `status_replies_ibfk_1` FOREIGN KEY (`status_id`) REFERENCES `statuses` (`id`),
-  CONSTRAINT `status_replies_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Records of status_replies
--- ----------------------------
-
--- ----------------------------
--- Table structure for `tokens`
--- ----------------------------
-DROP TABLE IF EXISTS `tokens`;
-CREATE TABLE `tokens` (
-  `user_id` int(11) DEFAULT NULL,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `tokens_ibfk` (`user_id`),
-  CONSTRAINT `tokens_ibfk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Records of tokens
--- ----------------------------
-
--- ----------------------------
--- Table structure for `users`
--- ----------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(64) DEFAULT NULL,
-  `username` varchar(32) NOT NULL,
-  `password_hash` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `avatar` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `self_intro` varchar(40) DEFAULT NULL,
-  `gender` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- ----------------------------
--- Records of users
--- ----------------------------
+CREATE TABLE tokens (
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    token VARCHAR(128),
+    user_id INTEGER NOT NULL,
+    PRIMARY KEY (id), 
+    FOREIGN KEY(user_id) REFERENCES users (id) 
+);
